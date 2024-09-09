@@ -1,0 +1,4 @@
+.env
+realtime-audio-translation-e9b11ac5ae89.json
+node_modules
+*.wav
