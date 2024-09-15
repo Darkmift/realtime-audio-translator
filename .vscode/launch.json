@@ -6,10 +6,17 @@
   "configurations": [
     {
       "command": "pnpm start:dev",
-      "name": "Run Server",
+      "name": "Run File Translator",
       "request": "launch",
       "type": "node-terminal",
-      "cwd": "${workspaceFolder}/backend"
+      "cwd": "${workspaceFolder}/Initial POC/backend"
+    },
+    {
+      "command": "pnpm start:dev",
+      "name": "WebRTC Server",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/MVC1/backend"
     },
   ]
 }
