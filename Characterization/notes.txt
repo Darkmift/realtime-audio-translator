@@ -1,0 +1,10 @@
+**dealer talks in english
+
+- language out []
+- dealer
+- table
+- starttime
+- endtime 
+20 mins
+
+webrtc ui
