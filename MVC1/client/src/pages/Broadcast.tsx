@@ -12,6 +12,24 @@ const BroadcastComponent: React.FC = () => {
     const initializeSession = async () => {
       console.log('Initializing OpenVidu session');
       const OV = new OpenVidu();
+
+      OV.setAdvancedConfiguration({
+        iceServers: [
+          {
+            urls: ['stun:stun.l.google.com:19302']
+          },
+          {
+            urls: [`turn:${import.meta.env.VITE_OPENVIDU_SERVER_IP}:3478`],
+            username: 'OPENVIDUAPP',
+            credential: import.meta.env.VITE_OPENVIDU_SECRET
+          }
+        ],
+        forceMediaReconnectionAfterNetworkDrop: true,
+        iceConnectionDisconnectedExceptionTimeout: 15000,
+        noStreamPlayingEventExceptionTimeout: 15000
+      });
+      
+
       const session = OV.initSession();
       console.log('Session initialized');
 
