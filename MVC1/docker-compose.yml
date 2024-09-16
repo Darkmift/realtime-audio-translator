@@ -12,6 +12,7 @@ services:
     environment:
       - OPENVIDU_URL=http://openvidu-server:4443  # Use service name for internal OpenVidu URL
       - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu
+      - CORS_ORIGIN=http://164.90.228.80:5173  # Allow CORS from your client
     networks:
       - app-network  # Use shared network
 
@@ -22,7 +23,7 @@ services:
     environment:
       - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu server
       - OPENVIDU_CERTIFICATE_TYPE=selfsigned  # For testing, self-signed certificate
-      - OPENVIDU_DOMAIN_OR_PUBLIC_IP=localhost
+      - OPENVIDU_DOMAIN_OR_PUBLIC_IP=164.90.228.80  # Use your DigitalOcean IP
     ports:
       - "4443:4443"  # Expose local port 4443 for HTTPS
     networks:
@@ -41,12 +42,11 @@ services:
     networks:
       - app-network
     environment:
-      - VITE_API_URL=http://node-app:3000  # Link frontend with backend using service name
+      - VITE_API_URL=http://164.90.228.80:3000  # Use your DigitalOcean IP
     volumes:
       - ./client:/app  # Mount the client directory for live updates
       - /app/node_modules
 
-# Define a shared network for communication between services
 networks:
   app-network:
     driver: bridge

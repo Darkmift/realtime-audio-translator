@@ -19,9 +19,9 @@ const Watch: React.FC = () => {
         subscriber.on('streamPlaying', () => {
           console.log('Subscriber playing:', subscriber.stream.streamId);
         });
-        setSubscribers(prevSubscribers => {
+        setSubscribers((prevSubscribers) => {
           // Check if this stream is already in the list
-          if (!prevSubscribers.find(sub => sub.stream.streamId === subscriber.stream.streamId)) {
+          if (!prevSubscribers.find((sub) => sub.stream.streamId === subscriber.stream.streamId)) {
             return [...prevSubscribers, subscriber];
           }
           return prevSubscribers;
@@ -34,8 +34,8 @@ const Watch: React.FC = () => {
 
       session.on('streamDestroyed', (event: StreamEvent) => {
         console.log('Stream destroyed:', event.stream.streamId);
-        setSubscribers(prevSubscribers => 
-          prevSubscribers.filter(sub => sub.stream.streamId !== event.stream.streamId)
+        setSubscribers((prevSubscribers) =>
+          prevSubscribers.filter((sub) => sub.stream.streamId !== event.stream.streamId)
         );
       });
 
@@ -44,14 +44,15 @@ const Watch: React.FC = () => {
       });
 
       try {
-        const response = await fetch('http://localhost:3000/generate-token', { 
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${API_URL}/generate-token`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ role: 'SUBSCRIBER' })
+          body: JSON.stringify({ role: 'SUBSCRIBER' }),
         });
         const data = await response.json();
         const token = data.token;
-        console.log("Token received:", token);
+        console.log('Token received:', token);
 
         await session.connect(token);
         console.log('Session connected');
@@ -81,8 +82,8 @@ const Watch: React.FC = () => {
       {mainStreamManager ? (
         <div className="main-video-container">
           <h3>Main Stream</h3>
-          <video 
-            ref={video => {
+          <video
+            ref={(video) => {
               if (video) {
                 video.muted = true;
                 mainStreamManager.addVideoElement(video);
@@ -98,18 +99,18 @@ const Watch: React.FC = () => {
       <div className="subscribers-container">
         <h3>All Streams ({subscribers.length})</h3>
         {subscribers.map((sub) => (
-          <div 
+          <div
             key={sub.stream.streamId}
             className="subscriber-video"
             onClick={() => handleMainVideoStream(sub)}
           >
-            <video 
-              ref={video => {
+            <video
+              ref={(video) => {
                 if (video) {
                   video.muted = true;
                   sub.addVideoElement(video);
                 }
-              }} 
+              }}
               autoPlay
               playsInline
             />
