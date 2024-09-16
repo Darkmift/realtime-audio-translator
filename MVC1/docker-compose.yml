@@ -21,12 +21,14 @@ services:
     image: openvidu/openvidu-server-kms:latest
     container_name: openvidu-server
     environment:
-      - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu server
-      - OPENVIDU_CERTIFICATE_TYPE=selfsigned  # For testing, self-signed certificate
-      - OPENVIDU_DOMAIN_OR_PUBLIC_IP=164.90.228.80  # Use your DigitalOcean IP
+      - DOMAIN_OR_PUBLIC_IP=164.90.228.80
+      - OPENVIDU_SECRET=MY_SECRET
+      - CERTIFICATE_TYPE=selfsigned
       - HTTPS_PORT=4443
+      - ALLOWED_ORIGINS=*
     ports:
-      - "4443:4443"  # Expose local port 4443 for HTTPS
+      - "4443:4443"
+      - "3478:3478"
     networks:
       - app-network  # Use shared network
     volumes:

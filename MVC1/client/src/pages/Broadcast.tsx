@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { OpenVidu, Publisher, Session, StreamEvent, StreamManager } from 'openvidu-browser';
 
+const OPENVIDU_SERVER_URL =
+  import.meta.env.VITE_OPENVIDU_SERVER_URL || 'https://164.90.228.80:4443';
+const API_URL = import.meta.env.VITE_API_URL || 'http://164.90.228.80:3000';
 
 const BroadcastComponent: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -12,23 +15,21 @@ const BroadcastComponent: React.FC = () => {
   useEffect(() => {
     const initializeSession = async () => {
       console.log('Initializing OpenVidu session');
-      const OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL || 'http://164.90.228.80:4443';
       const OV = new OpenVidu();
-      
+
       OV.setAdvancedConfiguration({
         iceServers: [
           { urls: ['stun:stun.l.google.com:19302'] },
           {
             urls: [`turn:${new URL(OPENVIDU_SERVER_URL).hostname}:3478`],
             username: 'OPENVIDUAPP',
-            credential: import.meta.env.VITE_OPENVIDU_SECRET
-          }
+            credential: import.meta.env.VITE_OPENVIDU_SECRET,
+          },
         ],
         forceMediaReconnectionAfterNetworkDrop: true,
         iceConnectionDisconnectedExceptionTimeout: 15000,
-        noStreamPlayingEventExceptionTimeout: 15000
+        noStreamPlayingEventExceptionTimeout: 15000,
       });
-      
 
       const session = OV.initSession();
       console.log('Session initialized');
@@ -51,7 +52,6 @@ const BroadcastComponent: React.FC = () => {
       });
 
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const response = await fetch(`${API_URL}/generate-token`, { method: 'POST' });
         const data = await response.json();
         console.log('Received token data:', data);
