@@ -53,7 +53,7 @@ const BroadcastComponent: React.FC = () => {
       });
 
       try {
-        const API_URL = OPENVIDU_SERVER_URL;
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const response = await fetch(`${API_URL}/generate-token`, { method: 'POST' });
         const data = await response.json();
         console.log('Received token data:', data);
