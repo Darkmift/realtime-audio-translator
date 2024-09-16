@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { OpenVidu, Publisher, Session, StreamEvent, StreamManager } from 'openvidu-browser';
 
+const OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL || 'https://164.90.228.80:4443';
+
 const BroadcastComponent: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [publisher, setPublisher] = useState<Publisher | null>(null);
@@ -19,9 +21,9 @@ const BroadcastComponent: React.FC = () => {
             urls: ['stun:stun.l.google.com:19302']
           },
           {
-            urls: [`turn:${import.meta.env.VITE_OPENVIDU_SERVER_IP}:3478`],
+            urls: [`turn:${OPENVIDU_SERVER_URL}:3478`],
             username: 'OPENVIDUAPP',
-            credential: import.meta.env.VITE_OPENVIDU_SECRET
+            credential: 'MY_SECRET'
           }
         ],
         forceMediaReconnectionAfterNetworkDrop: true,
@@ -51,7 +53,7 @@ const BroadcastComponent: React.FC = () => {
       });
 
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const API_URL = OPENVIDU_SERVER_URL;
         const response = await fetch(`${API_URL}/generate-token`, { method: 'POST' });
         const data = await response.json();
         console.log('Received token data:', data);
