@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { OpenVidu, Publisher, Session, StreamEvent, StreamManager } from 'openvidu-browser';
 
-const OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL || 'http://164.90.228.80:4443';
 
 const BroadcastComponent: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -13,17 +12,16 @@ const BroadcastComponent: React.FC = () => {
   useEffect(() => {
     const initializeSession = async () => {
       console.log('Initializing OpenVidu session');
+      const OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL || 'http://164.90.228.80:4443';
       const OV = new OpenVidu();
-
+      
       OV.setAdvancedConfiguration({
         iceServers: [
+          { urls: ['stun:stun.l.google.com:19302'] },
           {
-            urls: ['stun:stun.l.google.com:19302']
-          },
-          {
-            urls: [`turn:${OPENVIDU_SERVER_URL}:3478`],
+            urls: [`turn:${new URL(OPENVIDU_SERVER_URL).hostname}:3478`],
             username: 'OPENVIDUAPP',
-            credential: 'MY_SECRET'
+            credential: import.meta.env.VITE_OPENVIDU_SECRET
           }
         ],
         forceMediaReconnectionAfterNetworkDrop: true,
