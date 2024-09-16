@@ -3,7 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import { OpenVidu, OpenViduRole, Session } from 'openvidu-node-client';
 
-const OPENVIDU_URL = process.env.OPENVIDU_URL || 'http://localhost:4443';
+const OPENVIDU_URL = process.env.OPENVIDU_URL || 'http://openvidu-server:4443';
 const OPENVIDU_SECRET = process.env.OPENVIDU_SECRET || 'MY_SECRET';
 
 const openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
