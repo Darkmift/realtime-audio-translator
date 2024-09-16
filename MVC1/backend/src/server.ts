@@ -30,6 +30,8 @@ app.get('/health', async (req, res) => {
 });
 
 app.post('/generate-token', async (req, res) => {
+  console.log("🚀 ~ OPENVIDU_URL:", OPENVIDU_URL)
+  console.log("🚀 ~ OPENVIDU_SECRET:", OPENVIDU_SECRET)
   console.log('Received request to generate token');
   try {
     if (!session) {
