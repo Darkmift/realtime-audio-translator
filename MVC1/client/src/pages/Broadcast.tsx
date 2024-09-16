@@ -63,6 +63,13 @@ const BroadcastComponent: React.FC = () => {
 
         console.log('Initializing publisher');
 
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error('getUserMedia is not supported in this browser');
+        }
+    
+        // Request permissions before initializing the publisher
+        await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+
         const publisher = await OV.initPublisherAsync(undefined, {
           audioSource: undefined,
           videoSource: undefined,
