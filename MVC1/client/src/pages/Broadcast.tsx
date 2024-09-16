@@ -10,20 +10,22 @@ const BroadcastComponent: React.FC = () => {
 
   useEffect(() => {
     const initializeSession = async () => {
+      console.log('Initializing OpenVidu session');
       const OV = new OpenVidu();
       const session = OV.initSession();
+      console.log('Session initialized');
 
       setSession(session);
 
       session.on('streamCreated', (event: StreamEvent) => {
         console.log('New stream created:', event.stream.streamId);
         const subscriber = session.subscribe(event.stream, undefined);
-        setSubscribers(prev => [...prev, subscriber]);
+        setSubscribers((prev) => [...prev, subscriber]);
       });
 
       session.on('streamDestroyed', (event: StreamEvent) => {
         console.log('Stream destroyed:', event.stream.streamId);
-        setSubscribers(prev => prev.filter(sub => sub !== event.stream.streamManager));
+        setSubscribers((prev) => prev.filter((sub) => sub !== event.stream.streamManager));
       });
 
       session.on('exception', (exception) => {
@@ -34,10 +36,14 @@ const BroadcastComponent: React.FC = () => {
         const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const response = await fetch(`${API_URL}/generate-token`, { method: 'POST' });
         const data = await response.json();
+        console.log('Received token data:', data);
         const token = data.token;
 
+        console.log('Connecting to session with token');
         await session.connect(token);
-        console.log('Session connected');
+        console.log('Session connected successfully');
+
+        console.log('Initializing publisher');
 
         const publisher = await OV.initPublisherAsync(undefined, {
           audioSource: undefined,
@@ -50,6 +56,8 @@ const BroadcastComponent: React.FC = () => {
           mirror: false,
         });
 
+        console.log('Publisher initialized');
+
         setPublisher(publisher);
 
         if (videoRef.current) {
@@ -57,6 +65,10 @@ const BroadcastComponent: React.FC = () => {
         }
       } catch (error) {
         console.error('Error in broadcasting:', error);
+        if (error instanceof Error) {
+          console.error('Error details:', error.message);
+          console.error('Error stack:', error.stack);
+        }
       }
     };
 
@@ -124,13 +136,13 @@ const BroadcastComponent: React.FC = () => {
         <h3>Viewers ({subscribers.length})</h3>
         {subscribers.map((sub, index) => (
           <div key={index} className="subscriber-video">
-            <video 
-              ref={el => {
+            <video
+              ref={(el) => {
                 if (el) {
                   sub.addVideoElement(el);
                 }
-              }} 
-              autoPlay 
+              }}
+              autoPlay
             />
           </div>
         ))}
