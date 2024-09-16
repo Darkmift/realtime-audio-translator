@@ -24,6 +24,7 @@ services:
       - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu server
       - OPENVIDU_CERTIFICATE_TYPE=selfsigned  # For testing, self-signed certificate
       - OPENVIDU_DOMAIN_OR_PUBLIC_IP=164.90.228.80  # Use your DigitalOcean IP
+      - HTTPS_PORT=4443
     ports:
       - "4443:4443"  # Expose local port 4443 for HTTPS
     networks:
