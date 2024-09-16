@@ -29,22 +29,19 @@ app.get('/health', async (req, res) => {
   }
 });
 
+console.log('OpenVidu URL:', OPENVIDU_URL);
+console.log('OpenVidu Secret:', OPENVIDU_SECRET);
+
+
 app.post('/generate-token', async (req, res) => {
-  console.log("🚀 ~ OPENVIDU_URL:", OPENVIDU_URL)
-  console.log("🚀 ~ OPENVIDU_SECRET:", OPENVIDU_SECRET)
   console.log('Received request to generate token');
   try {
-    if (!session) {
-      console.log('Creating new session');
-      session = await openvidu.createSession({});
-    }
+    let session = await openvidu.createSession();
+    console.log('Session created:', session.sessionId);
 
-    console.log('Creating connection');
-    const connection = await session.createConnection({
-      role: req.body.role || OpenViduRole.PUBLISHER,
-    });
+    let connection = await session.createConnection();
+    console.log('Connection created, token:', connection.token);
 
-    console.log('Token generated successfully');
     res.status(200).json({ token: connection.token });
   } catch (error) {
     console.error('Error generating token:', error);
