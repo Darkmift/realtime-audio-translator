@@ -10,7 +10,7 @@ services:
     depends_on:
       - openvidu-server  # Ensure OpenVidu server starts before Node.js app
     environment:
-      - OPENVIDU_URL=http://openvidu-server:4443  # Use service name for internal OpenVidu URL
+      - OPENVIDU_URL=https://164.90.228.80:4443  # Use service name for internal OpenVidu URL
       - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu
       - CORS_ORIGIN=http://164.90.228.80:5173  # Allow CORS from your client
     networks:
