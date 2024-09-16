@@ -18,5 +18,19 @@
       "type": "node-terminal",
       "cwd": "${workspaceFolder}/MVC1/backend"
     },
+    {
+      "command": "pnpm start:dev",
+      "name": "WebRTC Client",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/MVC1/client"
+    },
+    {
+      "command": "docker-compose up -d --build",
+      "name": "Run Docker",
+      "request": "launch",
+      "type": "node-terminal",
+      "cwd": "${workspaceFolder}/MVC1/backend"
+    }
   ]
 }

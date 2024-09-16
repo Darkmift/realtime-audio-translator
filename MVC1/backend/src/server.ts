@@ -1,38 +1,41 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
 import cors from 'cors';
+import { OpenVidu, OpenViduRole, Session } from 'openvidu-node-client';
 
+const OPENVIDU_URL = process.env.OPENVIDU_URL || 'http://localhost:4443';
+const OPENVIDU_SECRET = process.env.OPENVIDU_SECRET || 'MY_SECRET';
+
+const openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
 const server = http.createServer(app);
-const io = new Server(server);
 
-let broadcaster:any;
-const port = 3000;
+let session: Session | null = null;
 
-app.use(express.static("public"));
+app.post('/generate-token', async (req, res) => {
+  try {
+    if (!session) {
+      session = await openvidu.createSession({});
+    }
 
-io.sockets.on("error", e => console.log(e));
-io.sockets.on("connection", socket => {
-  socket.on("broadcaster", () => {
-    broadcaster = socket.id;
-    socket.broadcast.emit("broadcaster");
-  });
-  socket.on("watcher", () => {
-    socket.to(broadcaster).emit("watcher", socket.id);
-  });
-  socket.on("offer", (id, message) => {
-    socket.to(id).emit("offer", socket.id, message);
-  });
-  socket.on("answer", (id, message) => {
-    socket.to(id).emit("answer", socket.id, message);
-  });
-  socket.on("candidate", (id, message) => {
-    socket.to(id).emit("candidate", socket.id, message);
-  });
-  socket.on("disconnect", () => {
-    socket.to(broadcaster).emit("disconnectPeer", socket.id);
-  });
+    const connection = await session.createConnection({
+      role: req.body.role || OpenViduRole.PUBLISHER,
+    });
+
+    res.status(200).send({ token: connection.token });
+  } catch (error) {
+    console.error('Error generating token:', error);
+    res.status(500).send('Error generating token');
+  }
 });
+
+const port = process.env.PORT || 3000;
+
 server.listen(port, () => console.log(`Server is running on port ${port}`));
+
+export default app;

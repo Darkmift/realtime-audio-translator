@@ -1,33 +1,32 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "ES2020",                                  // Target modern JavaScript version
-    "module": "commonjs",                                // Use commonjs module system (required for Node.js)
-    "lib": ["ES2020"],                                   // Use the latest ECMAScript features
-    "outDir": "./dist",                                  // Directory for compiled output
-    "rootDir": "./src",                                  // Source code directory
-    "strict": true,                                      // Enable strict type-checking options
+    "target": "ES6", // Target modern JavaScript version
+    "module": "commonjs", // Use commonjs module system (required for Node.js)
+    "lib": ["ES2020","dom"], // Use the latest ECMAScript features
+    "outDir": "./dist", // Directory for compiled output
+    "rootDir": "./", // Source code directory
+    "strict": true, // Enable strict type-checking options
 
     /* Module Resolution Options */
-    "moduleResolution": "node",                          // Ensure modules are resolved like Node.js
-    "esModuleInterop": true,                             // Allow ES modules to interoperate with CommonJS
-    "forceConsistentCasingInFileNames": true,            // Enforce consistent file name casing
-    "resolveJsonModule": true,                           // Allow importing .json files
+    "moduleResolution": "node", // Ensure modules are resolved like Node.js
+    "esModuleInterop": true, // Allow ES modules to interoperate with CommonJS
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file name casing
+    "resolveJsonModule": true, // Allow importing .json files
 
     /* Source Map Options */
-    "sourceMap": true,                                   // Generate source maps to help debug TypeScript code
-    "inlineSources": true,                               // Include sources within the source map
+    "sourceMap": true, // Generate source maps to help debug TypeScript code
+    "inlineSources": true, // Include sources within the source map
 
     /* Node.js Specific Options */
-    "skipLibCheck": true,                                // Skip type checking of declaration files for faster builds
-    "types": ["node"],                                   // Include type definitions for Node.js
+    "skipLibCheck": true, // Skip type checking of declaration files for faster builds
+    "types": ["node", "webrtc"], // Include type definitions for Node.js
 
     /* Experimental Options */
-    "experimentalDecorators": true,                      // Enable support for experimental decorators
-    "emitDecoratorMetadata": true                        // Emit metadata for experimental decorators (useful for frameworks like TypeORM)
+    "experimentalDecorators": true, // Enable support for experimental decorators
+    "emitDecoratorMetadata": true // Emit metadata for experimental decorators (useful for frameworks like TypeORM)
   },
-  "exclude": [
-    "node_modules",                                      // Exclude node_modules directory
-    "dist"                                               // Exclude output directory
-  ]
+  "include": ["src/**/*.ts", "public/**/*.ts"],   // Include both src and public TypeScript files
+  "exclude": ["node_modules", "dist"]             // Exclude non-compiled assets
+
 }

@@ -1,0 +1,44 @@
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+/* App.css */
+html, body, #root, .app {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.navbar {
+  flex: 0 0 auto; /* Navbar takes only as much space as it needs */
+}
+
+.content {
+  flex: 1; /* Content takes up the remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+video {
+  width: 100%;
+  height: auto;
+  background-color: black;
+}
