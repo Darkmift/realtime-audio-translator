@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { OpenVidu, Publisher, Session, StreamEvent, StreamManager } from 'openvidu-browser';
 
-const OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL || 'https://164.90.228.80:4443';
+const OPENVIDU_SERVER_URL = import.meta.env.VITE_OPENVIDU_SERVER_URL || 'http://164.90.228.80:4443';
 
 const BroadcastComponent: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
