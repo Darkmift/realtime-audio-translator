@@ -1,0 +1,27 @@
+services:
+  - type: web
+    runtime: node
+    name: node-app
+
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    buildCommand: ""
+    startCommand: "npm start"  # Or your start command
+    autoDeploy: true
+    envVars:
+      - key: OPENVIDU_URL
+        value: https://openvidu.yourdomain.com
+      - key: OPENVIDU_SECRET
+        value: MY_SECRET
+  - type: web
+    runtime: node
+    name: client
+    plan: free
+    dockerfilePath: ./client/Dockerfile
+    buildCommand: "npm run build"
+    startCommand: "npm run serve"
+    autoDeploy: true
+    envVars:
+      - key: VITE_API_URL
+        value: https://node-app.yourdomain.com
+
