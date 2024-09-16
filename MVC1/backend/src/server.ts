@@ -11,26 +11,42 @@ const openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN
+}));
 
 const server = http.createServer(app);
 
 let session: Session | null = null;
 
+app.get('/health', async (req, res) => {
+  try {
+    await openvidu.fetch();
+    res.status(200).json({ status: 'OK', message: 'Connected to OpenVidu server' });
+  } catch (error) {
+    console.error('Error connecting to OpenVidu server:', error);
+    res.status(500).json({ status: 'Error', message: 'Failed to connect to OpenVidu server' });
+  }
+});
+
 app.post('/generate-token', async (req, res) => {
+  console.log('Received request to generate token');
   try {
     if (!session) {
+      console.log('Creating new session');
       session = await openvidu.createSession({});
     }
 
+    console.log('Creating connection');
     const connection = await session.createConnection({
       role: req.body.role || OpenViduRole.PUBLISHER,
     });
 
-    res.status(200).send({ token: connection.token });
+    console.log('Token generated successfully');
+    res.status(200).json({ token: connection.token });
   } catch (error) {
     console.error('Error generating token:', error);
-    res.status(500).send('Error generating token');
+    res.status(500).json({ error: 'Error generating token', details: (error as Error).message });
   }
 });
 
