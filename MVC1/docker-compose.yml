@@ -44,6 +44,7 @@ services:
       - VITE_API_URL=http://node-app:3000  # Link frontend with backend using service name
     volumes:
       - ./client:/app  # Mount the client directory for live updates
+      - /app/node_modules
 
 # Define a shared network for communication between services
 networks:
