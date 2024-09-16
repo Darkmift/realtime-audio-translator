@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  # Node.js server (your app)
+  # Backend (Node.js server)
   node-app:
-    build: .
+    build: ./backend
     container_name: node-app
     ports:
       - "3000:3000"  # Expose local port 3000
     depends_on:
       - openvidu-server  # Ensure OpenVidu server starts before Node.js app
     environment:
-      - OPENVIDU_URL=http://localhost:4443  # Use internal service name for OpenVidu URL
+      - OPENVIDU_URL=http://openvidu-server:4443  # Use service name for internal OpenVidu URL
       - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu
     networks:
       - app-network  # Use shared network
@@ -21,7 +21,7 @@ services:
     container_name: openvidu-server
     environment:
       - OPENVIDU_SECRET=MY_SECRET  # Secret for OpenVidu server
-      - OPENVIDU_CERTIFICATE_TYPE=selfsigned  # For testing, you can use a self-signed certificate
+      - OPENVIDU_CERTIFICATE_TYPE=selfsigned  # For testing, self-signed certificate
       - OPENVIDU_DOMAIN_OR_PUBLIC_IP=localhost
     ports:
       - "4443:4443"  # Expose local port 4443 for HTTPS
@@ -29,6 +29,21 @@ services:
       - app-network  # Use shared network
     volumes:
       - /dev/shm:/dev/shm  # Necessary for WebRTC performance, optional but recommended
+
+  # Frontend (React client)
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - "5173:5173"  # Vite default port
+    depends_on:
+      - node-app
+    networks:
+      - app-network
+    environment:
+      - VITE_API_URL=http://node-app:3000  # Link frontend with backend using service name
+    volumes:
+      - ./client:/app  # Mount the client directory for live updates
 
 # Define a shared network for communication between services
 networks:
